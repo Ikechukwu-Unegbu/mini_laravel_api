@@ -23,10 +23,24 @@ class ForgotController extends Controller
             ]);
         }
         $token = str::random(10);
+        try{
+            DB::table('password_resets')->insert([
+                'email'=>$email,
+                'token'=>$token
+            ]);
+            //send email
 
-        DB::table('pasword_resets')->insert([
-            'email'=>$email,
-            'token'=>$token
-        ]);
+            return response([
+                'message'=>'Check your email'
+            ]);
+
+
+        }catch(\Exception $exp){
+             return response([
+                 'message'=>$exp->getMessage(),
+                 'status'=>400
+             ]);
+        }
+     
     }
 }
